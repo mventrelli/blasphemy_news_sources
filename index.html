@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Sources & Data</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+        .logo {
+            max-width: 150px;
+            border-radius: 50%; /* Optional: makes a square logo round */
+            margin-bottom: 10px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #111;
+        }
+        p.subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        .episode-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .episode-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+        .episode-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .episode-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .episode-desc {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .download-btn {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .download-btn:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logo.png" alt="Channel Logo" class="logo">
+        <h1>Source Documents</h1>
+        <p class="subtitle">Complete data and citations for every episode.</p>
+    </header>
+
+    <div class="episode-list">
+        
+        <div class="episode-card">
+            <div>
+                <h2 class="episode-title">Episode 2: [Insert Topic Here]</h2>
+                <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
+            </div>
+            <a href="ep2-sources.pdf" target="_blank" class="download-btn">View PDF</a>
+        </div>
+
+        <div class="episode-card">
+            <div>
+                <h2 class="episode-title">Episode 1: [Insert Topic Here]</h2>
+                <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
+            </div>
+            <a href="ep1-sources.pdf" target="_blank" class="download-btn">View PDF</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
