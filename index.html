@@ -3,106 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Sources & Data</title>
+    <title>Source Documents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Special+Elite&family=Ultra&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
+        /* ========================================
+           CSS CUSTOM PROPERTIES
+           ======================================== */
+        :root {
+            --ink: #1a1a1a;
+            --paper: #f0e6d3;
+            --paper-dark: #e0d3bc;
+            --paper-light: #f7f0e3;
+            --accent: #c0392b;
+            --accent-dark: #922b21;
+            --shadow: rgba(26, 26, 26, 0.15);
+            --font-headline: 'Ultra', serif;
+            --font-body: 'Special Elite', monospace;
+            --font-serif: 'Playfair Display', serif;
         }
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-top: 20px;
-        }
-        .logo {
-            max-width: 150px;
-            border-radius: 50%; /* Optional: makes a square logo round */
-            margin-bottom: 10px;
-        }
-        h1 {
+
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+        *, *::before, *::after {
             margin: 0;
-            font-size: 2rem;
-            color: #111;
+            padding: 0;
+            box-sizing: border-box;
         }
-        p.subtitle {
-            color: #666;
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* Subtle paper grain overlay */
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(0,0,0,0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,0,0,0.03) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        /* ========================================
+           HALFTONE BACKGROUND PATTERN
+           ======================================== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: radial-gradient(circle, var(--ink) 0.5px, transparent 0.5px);
+            background-size: 8px 8px;
+            opacity: 0.025;
+        }
+
+        /* ========================================
+           MAIN CONTAINER — NEWSPAPER BROADSHEET
+           ======================================== */
+        .broadsheet {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* ========================================
+           MASTHEAD
+           ======================================== */
+        .masthead {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 4px double var(--ink);
+            position: relative;
+        }
+
+        .masthead::before {
+            content: '★ ★ ★';
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 1.2em;
+            margin-bottom: 10px;
+            color: var(--ink);
+            opacity: 0.5;
+        }
+
+        .dateline {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            opacity: 0.6;
+            margin-bottom: 15px;
+        }
+
+        .logo-container {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid var(--ink);
+            object-fit: cover;
+            display: block;
+            /* Old print look */
+            filter: grayscale(100%) contrast(1.4);
+            transition: filter 0.4s ease, transform 0.4s ease;
+        }
+
+        .logo:hover {
+            filter: grayscale(100%) contrast(1.6) brightness(1.1);
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid var(--ink);
+            opacity: 0.3;
+        }
+
+        .site-title {
+            font-family: var(--font-headline);
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1.1;
+            margin-bottom: 5px;
+            /* Old ink stamp effect */
+            text-shadow:
+                2px 2px 0 var(--paper),
+                3px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        .site-subtitle {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(0.9rem, 2.5vw, 1.15rem);
+            opacity: 0.7;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .masthead-rule {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .masthead-rule::before,
+        .masthead-rule::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--ink);
+            opacity: 0.3;
+        }
+
+        .masthead-rule span {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            opacity: 0.4;
+            white-space: nowrap;
+        }
+
+        /* ========================================
+           SECTION HEADER — LIKE A NEWSPAPER SECTION
+           ======================================== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 35px 0 25px;
+            padding: 0;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-headline);
             font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            white-space: nowrap;
         }
+
+        .section-header::after {
+            content: '';
+            flex: 1;
+            height: 3px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--ink) 0px,
+                var(--ink) 8px,
+                transparent 8px,
+                transparent 12px
+            );
+            opacity: 0.25;
+        }
+
+        /* ========================================
+           EPISODE CARDS
+           ======================================== */
         .episode-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 0;
         }
+
         .episode-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s ease;
+            gap: 20px;
+            padding: 22px 25px;
+            background: var(--paper-light);
+            border: 2px solid var(--ink);
+            border-bottom: none;
+            position: relative;
+            transition: background 0.25s ease, transform 0.2s ease;
         }
+
+        .episode-card:last-child {
+            border-bottom: 2px solid var(--ink);
+        }
+
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--ink);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+        }
+
         .episode-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            background: var(--paper-dark);
         }
+
+        .episode-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .episode-number {
+            font-family: var(--font-headline);
+            font-size: 2.2rem;
+            line-height: 1;
+            opacity: 0.12;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .episode-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .episode-tag {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            opacity: 0.5;
+            margin-bottom: 3px;
+        }
+
         .episode-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 0;
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 4px;
         }
+
         .episode-desc {
-            margin: 5px 0 0 0;
-            font-size: 0.9rem;
-            color: #555;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            opacity: 0.6;
+            line-height: 1.5;
         }
-        .download-btn {
-            background-color: #000;
-            color: #fff;
-            padding: 10px 20px;
+
+        .view-btn {
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            font-family: var(--font-headline);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            color: var(--paper);
+            background: var(--ink);
+            border: 2px solid var(--ink);
+            transition: all 0.25s ease;
         }
-        .download-btn:hover {
-            background-color: #333;
+
+        .view-btn:hover {
+            color: var(--ink);
+            background: var(--paper);
+        }
+
+        .view-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            transition: transform 0.25s ease;
+        }
+
+        .view-btn:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* ========================================
+           BANNER / CALLOUT STRIP
+           ======================================== */
+        .callout-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+            padding: 14px 20px;
+            background: var(--ink);
+            color: var(--paper);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            text-align: center;
+        }
+
+        .callout-strip a {
+            color: var(--paper);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .callout-strip a:hover {
+            opacity: 0.7;
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 10px;
+            border-top: 1px solid rgba(26,26,26,0.15);
+        }
+
+        .footer-fist {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            filter: grayscale(100%);
+        }
+
+        .footer p {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            opacity: 0.35;
+        }
+
+        /* ========================================
+           DECORATIVE CORNER MARKS (print crop marks vibe)
+           ======================================== */
+        .broadsheet::before,
+        .broadsheet::after {
+            content: '+';
+            position: absolute;
+            font-size: 0.7rem;
+            opacity: 0.15;
+            font-family: monospace;
+        }
+        .broadsheet::before { top: 5px; left: 5px; }
+        .broadsheet::after { top: 5px; right: 5px; }
+
+        /* ========================================
+           ENTRANCE ANIMATIONS
+           ======================================== */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .masthead {
+            animation: fadeSlideUp 0.6s ease both;
+        }
+
+        .section-header {
+            animation: fadeSlideUp 0.6s ease 0.15s both;
+        }
+
+        .episode-card {
+            animation: fadeSlideUp 0.5s ease both;
+        }
+
+        .episode-card:nth-child(1) { animation-delay: 0.25s; }
+        .episode-card:nth-child(2) { animation-delay: 0.35s; }
+        .episode-card:nth-child(3) { animation-delay: 0.45s; }
+        .episode-card:nth-child(4) { animation-delay: 0.55s; }
+        .episode-card:nth-child(5) { animation-delay: 0.65s; }
+
+        .callout-strip {
+            animation: fadeSlideUp 0.5s ease 0.5s both;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 600px) {
+            .broadsheet {
+                margin: 15px auto;
+                padding: 0 12px;
+            }
+
+            .masthead {
+                padding: 25px 10px 20px;
+            }
+
+            .logo {
+                width: 110px;
+                height: 110px;
+            }
+
+            .episode-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 18px 15px;
+                gap: 12px;
+            }
+
+            .episode-number {
+                font-size: 1.6rem;
+                right: 12px;
+            }
+
+            .view-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="logo.png" alt="Channel Logo" class="logo">
-        <h1>Source Documents</h1>
-        <p class="subtitle">Complete data and citations for every episode.</p>
-    </header>
+    <div class="broadsheet">
 
-    <div class="episode-list">
-        
-        <div class="episode-card">
-            <div>
-                <h2 class="episode-title">Episode 2: [Insert Topic Here]</h2>
-                <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
+        <!-- MASTHEAD -->
+        <header class="masthead">
+            <p class="dateline" id="dateline"></p>
+
+            <div class="logo-container">
+                <img src="logo.png" alt="Channel Logo" class="logo">
             </div>
-            <a href="ep2-sources.pdf" target="_blank" class="download-btn">View PDF</a>
+
+            <h1 class="site-title">Source Documents</h1>
+            <p class="site-subtitle">Complete data &amp; citations for every episode &mdash; because the people deserve receipts.</p>
+
+            <div class="masthead-rule">
+                <span>Verified &bull; Cited &bull; Transparent</span>
+            </div>
+        </header>
+
+        <!-- EPISODES SECTION -->
+        <div class="section-header">
+            <h2>Episodes</h2>
         </div>
 
-        <div class="episode-card">
-            <div>
-                <h2 class="episode-title">Episode 1: [Insert Topic Here]</h2>
-                <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
+        <div class="episode-list">
+
+            <div class="episode-card">
+                <span class="episode-number">02</span>
+                <div class="episode-info">
+                    <p class="episode-tag">Episode 2</p>
+                    <h2 class="episode-title">[Insert Topic Here]</h2>
+                    <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
+                </div>
+                <a href="ep2-sources.pdf" target="_blank" class="view-btn">
+                    View PDF
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
             </div>
-            <a href="ep1-sources.pdf" target="_blank" class="download-btn">View PDF</a>
+
+            <div class="episode-card">
+                <span class="episode-number">01</span>
+                <div class="episode-info">
+                    <p class="episode-tag">Episode 1</p>
+                    <h2 class="episode-title">[Insert Topic Here]</h2>
+                    <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
+                </div>
+                <a href="ep1-sources.pdf" target="_blank" class="view-btn">
+                    View PDF
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
         </div>
+
+        <!-- BOTTOM BANNER -->
+        <div class="callout-strip">
+            ✊ &nbsp;No corporate sponsors. No fat cats. Just facts. &nbsp;✊
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-fist">✊</div>
+            <p>&copy; <span id="year"></span> &mdash; For the people, by the people</p>
+        </footer>
 
     </div>
+
+    <script>
+        // Set dynamic dateline
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('dateline').textContent = now.toLocaleDateString('en-US', options).toUpperCase();
+        document.getElementById('year').textContent = now.getFullYear();
+    </script>
 
 </body>
 </html>
