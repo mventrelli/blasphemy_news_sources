@@ -512,40 +512,34 @@
             3. Change these 4 things:
                - episode-number: the big background number (e.g. 03)
                - episode-tag: the small label text (e.g. Episode 3)
-               - episode-title: your episode's topic
                - href: the filename of your PDF (e.g. ep3-sources.pdf)
             4. Upload your PDF file to the same folder as index.html
             5. Push to GitHub — done!
             ============================================================
             -->
-
+           <div class="episode-card">
+                        <span class="episode-number">01</span>           <!-- CHANGE: episode number (big background text) -->
+                        <div class="episode-info">
+                            <p class="episode-tag">Episode 1</p>          <!-- CHANGE: episode label -->
+                        </div>
+                        <a href="ep1-sources.html" target="_blank" class="view-btn">  <!-- CHANGE: PDF filename -->
+                            View PDF
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
             <!-- ✂️ COPY FROM HERE ============================== -->
             <div class="episode-card">
                 <span class="episode-number">02</span>           <!-- CHANGE: episode number (big background text) -->
                 <div class="episode-info">
                     <p class="episode-tag">Episode 2</p>          <!-- CHANGE: episode label -->
                     <h2 class="episode-title">[Insert Topic Here]</h2>  <!-- CHANGE: episode topic title -->
-                    <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
                 </div>
-                <a href="ep2-sources.pdf" target="_blank" class="view-btn">  <!-- CHANGE: PDF filename -->
+                <a href="ep2-sources.html" target="_blank" class="view-btn">  <!-- CHANGE: PDF filename -->
                     View PDF
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
             </div>
             <!-- ✂️ COPY TO HERE ================================ -->
-
-            <div class="episode-card">
-                <span class="episode-number">01</span>
-                <div class="episode-info">
-                    <p class="episode-tag">Episode 1</p>
-                    <h2 class="episode-title">[Insert Topic Here]</h2>
-                    <p class="episode-desc">Data sets and primary sources referenced in the video.</p>
-                </div>
-                <a href="ep1-sources.pdf" target="_blank" class="view-btn">
-                    View PDF
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
 
         </div>
 
